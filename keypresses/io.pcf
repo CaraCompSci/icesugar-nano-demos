@@ -2,12 +2,12 @@
 
 #   FPGA pins:
 
-set_io LED B6
+# set_io LED B6
 
 set_io CLK D1
 
-set_io RX  A3
-set_io TX  B3
+# set_io RX  A3
+# set_io TX  B3
 
 #   PMOD FULL (PMOD3)
 
@@ -44,10 +44,10 @@ set_io --warn-no-port PMOD8 A1
 #    | 3V3 | 
 #     -----
 #
-set_io --warn-no-port PMODL1 B3
-set_io --warn-no-port PMODL2 A3
-set_io --warn-no-port PMODL3 B6
-set_io --warn-no-port PMODL4 C5
+set_io  --warn-no-port PMODL1 B3
+set_io  --warn-no-port PMODL2 A3
+set_io  --warn-no-port PMODL3 B6
+set_io  --warn-no-port PMODL4 C5
 
 #   PMOD RIGHT (PMOD1)
 

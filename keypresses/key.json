@@ -195,7 +195,6 @@
     "SB_DFF": {
       "attributes": {
         "blackbox": 1,
-        "cells_not_processed": 1,
         "src": "/usr/bin/../share/yosys/ice40/cells_sim.v:144"
       },
       "ports": {
@@ -1287,6 +1286,7 @@
     "SB_DFFSR": {
       "attributes": {
         "blackbox": 1,
+        "cells_not_processed": 1,
         "src": "/usr/bin/../share/yosys/ice40/cells_sim.v:155"
       },
       "ports": {
@@ -5519,39 +5519,39 @@
         },
         "PMODL1": {
           "direction": "output",
-          "bits": [ "x" ]
+          "bits": [ 5 ]
         },
         "PMODL2": {
           "direction": "output",
-          "bits": [ "x" ]
+          "bits": [ 6 ]
         },
         "PMOD2": {
           "direction": "output",
-          "bits": [ 5 ]
+          "bits": [ 7 ]
         },
         "PMOD4": {
           "direction": "output",
-          "bits": [ 6 ]
+          "bits": [ 8 ]
         },
         "PMOD6": {
           "direction": "output",
-          "bits": [ 7 ]
+          "bits": [ 9 ]
         },
         "PMOD8": {
           "direction": "output",
-          "bits": [ 8 ]
+          "bits": [ 10 ]
         }
       },
       "cells": {
-        "$abc$258$auto$blifparse.cc:492:parse_blif$259": {
+        "$abc$228$auto$blifparse.cc:492:parse_blif$229": {
           "hide_name": 1,
           "type": "SB_LUT4",
           "parameters": {
-            "LUT_INIT": 231
+            "LUT_INIT": 60415
           },
           "attributes": {
             "module_not_derived": 1,
-            "src": "/usr/bin/../share/yosys/ice40/cells_map.v:48"
+            "src": "/usr/bin/../share/yosys/ice40/cells_map.v:52"
           },
           "port_directions": {
             "I0": "input",
@@ -5561,18 +5561,18 @@
             "O": "output"
           },
           "connections": {
-            "I0": [ 9 ],
+            "I0": [ 6 ],
             "I1": [ 3 ],
             "I2": [ 4 ],
-            "I3": [ "0" ],
-            "O": [ 10 ]
+            "I3": [ 5 ],
+            "O": [ 11 ]
           }
         },
-        "$abc$258$auto$blifparse.cc:492:parse_blif$260": {
+        "$abc$228$auto$blifparse.cc:492:parse_blif$230": {
           "hide_name": 1,
           "type": "SB_LUT4",
           "parameters": {
-            "LUT_INIT": 6144
+            "LUT_INIT": 4096
           },
           "attributes": {
             "module_not_derived": 1,
@@ -5586,18 +5586,18 @@
             "O": "output"
           },
           "connections": {
-            "I0": [ 9 ],
-            "I1": [ 3 ],
+            "I0": [ 3 ],
+            "I1": [ 5 ],
             "I2": [ 4 ],
-            "I3": [ 11 ],
-            "O": [ 12 ]
+            "I3": [ 6 ],
+            "O": [ 7 ]
           }
         },
-        "$abc$258$auto$blifparse.cc:492:parse_blif$261": {
+        "$abc$228$auto$blifparse.cc:492:parse_blif$231": {
           "hide_name": 1,
           "type": "SB_LUT4",
           "parameters": {
-            "LUT_INIT": 320
+            "LUT_INIT": 4096
           },
           "attributes": {
             "module_not_derived": 1,
@@ -5611,93 +5611,18 @@
             "O": "output"
           },
           "connections": {
-            "I0": [ 11 ],
-            "I1": [ 9 ],
-            "I2": [ 3 ],
-            "I3": [ 4 ],
-            "O": [ 13 ]
-          }
-        },
-        "$abc$258$auto$blifparse.cc:492:parse_blif$262": {
-          "hide_name": 1,
-          "type": "SB_LUT4",
-          "parameters": {
-            "LUT_INIT": 256
-          },
-          "attributes": {
-            "module_not_derived": 1,
-            "src": "/usr/bin/../share/yosys/ice40/cells_map.v:52"
-          },
-          "port_directions": {
-            "I0": "input",
-            "I1": "input",
-            "I2": "input",
-            "I3": "input",
-            "O": "output"
-          },
-          "connections": {
-            "I0": [ 9 ],
-            "I1": [ 11 ],
-            "I2": [ 3 ],
+            "I0": [ 3 ],
+            "I1": [ 6 ],
+            "I2": [ 5 ],
             "I3": [ 4 ],
             "O": [ 8 ]
           }
         },
-        "$abc$258$auto$blifparse.cc:492:parse_blif$263": {
+        "$abc$228$auto$blifparse.cc:492:parse_blif$232": {
           "hide_name": 1,
           "type": "SB_LUT4",
           "parameters": {
             "LUT_INIT": 4096
-          },
-          "attributes": {
-            "module_not_derived": 1,
-            "src": "/usr/bin/../share/yosys/ice40/cells_map.v:52"
-          },
-          "port_directions": {
-            "I0": "input",
-            "I1": "input",
-            "I2": "input",
-            "I3": "input",
-            "O": "output"
-          },
-          "connections": {
-            "I0": [ 9 ],
-            "I1": [ 3 ],
-            "I2": [ 11 ],
-            "I3": [ 4 ],
-            "O": [ 7 ]
-          }
-        },
-        "$abc$258$auto$blifparse.cc:492:parse_blif$264": {
-          "hide_name": 1,
-          "type": "SB_LUT4",
-          "parameters": {
-            "LUT_INIT": 4096
-          },
-          "attributes": {
-            "module_not_derived": 1,
-            "src": "/usr/bin/../share/yosys/ice40/cells_map.v:52"
-          },
-          "port_directions": {
-            "I0": "input",
-            "I1": "input",
-            "I2": "input",
-            "I3": "input",
-            "O": "output"
-          },
-          "connections": {
-            "I0": [ 11 ],
-            "I1": [ 4 ],
-            "I2": [ 3 ],
-            "I3": [ 9 ],
-            "O": [ 6 ]
-          }
-        },
-        "$abc$258$auto$blifparse.cc:492:parse_blif$265": {
-          "hide_name": 1,
-          "type": "SB_LUT4",
-          "parameters": {
-            "LUT_INIT": 16384
           },
           "attributes": {
             "module_not_derived": 1,
@@ -5712,15 +5637,65 @@
           },
           "connections": {
             "I0": [ 4 ],
-            "I1": [ 11 ],
+            "I1": [ 5 ],
             "I2": [ 3 ],
-            "I3": [ 9 ],
-            "O": [ 5 ]
+            "I3": [ 6 ],
+            "O": [ 9 ]
           }
         },
-        "$auto$simplemap.cc:420:simplemap_dff$166": {
+        "$abc$228$auto$blifparse.cc:492:parse_blif$233": {
           "hide_name": 1,
-          "type": "SB_DFFSR",
+          "type": "SB_LUT4",
+          "parameters": {
+            "LUT_INIT": 4096
+          },
+          "attributes": {
+            "module_not_derived": 1,
+            "src": "/usr/bin/../share/yosys/ice40/cells_map.v:52"
+          },
+          "port_directions": {
+            "I0": "input",
+            "I1": "input",
+            "I2": "input",
+            "I3": "input",
+            "O": "output"
+          },
+          "connections": {
+            "I0": [ 4 ],
+            "I1": [ 6 ],
+            "I2": [ 5 ],
+            "I3": [ 3 ],
+            "O": [ 10 ]
+          }
+        },
+        "$abc$228$auto$blifparse.cc:492:parse_blif$234": {
+          "hide_name": 1,
+          "type": "SB_LUT4",
+          "parameters": {
+            "LUT_INIT": 5120
+          },
+          "attributes": {
+            "module_not_derived": 1,
+            "src": "/usr/bin/../share/yosys/ice40/cells_map.v:52"
+          },
+          "port_directions": {
+            "I0": "input",
+            "I1": "input",
+            "I2": "input",
+            "I3": "input",
+            "O": "output"
+          },
+          "connections": {
+            "I0": [ 6 ],
+            "I1": [ 3 ],
+            "I2": [ 4 ],
+            "I3": [ 5 ],
+            "O": [ 12 ]
+          }
+        },
+        "$auto$simplemap.cc:420:simplemap_dff$152": {
+          "hide_name": 1,
+          "type": "SB_DFF",
           "parameters": {
           },
           "attributes": {
@@ -5730,19 +5705,17 @@
           "port_directions": {
             "C": "input",
             "D": "input",
-            "Q": "output",
-            "R": "input"
+            "Q": "output"
           },
           "connections": {
             "C": [ 2 ],
-            "D": [ 13 ],
-            "Q": [ 11 ],
-            "R": [ 10 ]
+            "D": [ 11 ],
+            "Q": [ 5 ]
           }
         },
-        "$auto$simplemap.cc:420:simplemap_dff$167": {
+        "$auto$simplemap.cc:420:simplemap_dff$153": {
           "hide_name": 1,
-          "type": "SB_DFFSR",
+          "type": "SB_DFF",
           "parameters": {
           },
           "attributes": {
@@ -5752,36 +5725,16 @@
           "port_directions": {
             "C": "input",
             "D": "input",
-            "Q": "output",
-            "R": "input"
+            "Q": "output"
           },
           "connections": {
             "C": [ 2 ],
             "D": [ 12 ],
-            "Q": [ 9 ],
-            "R": [ 10 ]
+            "Q": [ 6 ]
           }
         }
       },
       "netnames": {
-        "$abc$258$auto$opt_reduce.cc:132:opt_mux$23": {
-          "hide_name": 1,
-          "bits": [ 12 ],
-          "attributes": {
-          }
-        },
-        "$abc$258$auto$opt_reduce.cc:132:opt_mux$25": {
-          "hide_name": 1,
-          "bits": [ 13 ],
-          "attributes": {
-          }
-        },
-        "$abc$258$auto$rtlil.cc:1969:NotGate$252": {
-          "hide_name": 1,
-          "bits": [ 10 ],
-          "attributes": {
-          }
-        },
         "CLK": {
           "hide_name": 0,
           "bits": [ 2 ],
@@ -5791,42 +5744,42 @@
         },
         "PMOD2": {
           "hide_name": 0,
-          "bits": [ 5 ],
+          "bits": [ 7 ],
           "attributes": {
             "src": "key.v:44"
           }
         },
         "PMOD4": {
           "hide_name": 0,
-          "bits": [ 6 ],
+          "bits": [ 8 ],
           "attributes": {
             "src": "key.v:44"
           }
         },
         "PMOD6": {
           "hide_name": 0,
-          "bits": [ 7 ],
+          "bits": [ 9 ],
           "attributes": {
             "src": "key.v:44"
           }
         },
         "PMOD8": {
           "hide_name": 0,
-          "bits": [ 8 ],
+          "bits": [ 10 ],
           "attributes": {
             "src": "key.v:44"
           }
         },
         "PMODL1": {
           "hide_name": 0,
-          "bits": [ "x" ],
+          "bits": [ 5 ],
           "attributes": {
             "src": "key.v:44"
           }
         },
         "PMODL2": {
           "hide_name": 0,
-          "bits": [ "x" ],
+          "bits": [ 6 ],
           "attributes": {
             "src": "key.v:44"
           }
@@ -5847,7 +5800,7 @@
         },
         "col": {
           "hide_name": 0,
-          "bits": [ "x", "x" ],
+          "bits": [ 5, 6 ],
           "attributes": {
             "src": "key.v:51"
           }
@@ -5861,21 +5814,21 @@
         },
         "kp.col": {
           "hide_name": 0,
-          "bits": [ "x", "x" ],
+          "bits": [ 5, 6 ],
           "attributes": {
             "src": "key.v:62|key.v:5"
           }
         },
-        "kp.col_synced": {
+        "kp.col_next": {
           "hide_name": 0,
-          "bits": [ 11, 9 ],
+          "bits": [ 11, 12 ],
           "attributes": {
-            "src": "key.v:62|key.v:11"
+            "src": "key.v:62|key.v:12"
           }
         },
         "kp.leds": {
           "hide_name": 0,
-          "bits": [ 8, 7, 6, 5 ],
+          "bits": [ 7, 8, 9, 10 ],
           "attributes": {
             "init": 0,
             "src": "key.v:62|key.v:6"
@@ -5883,7 +5836,7 @@
         },
         "kp.leds_next": {
           "hide_name": 0,
-          "bits": [ 8, 7, 6, 5 ],
+          "bits": [ 7, 8, 9, 10 ],
           "attributes": {
             "init": 0,
             "src": "key.v:62|key.v:10"
@@ -5898,7 +5851,7 @@
         },
         "leds": {
           "hide_name": 0,
-          "bits": [ 8, 7, 6, 5 ],
+          "bits": [ 7, 8, 9, 10 ],
           "attributes": {
             "src": "key.v:50"
           }

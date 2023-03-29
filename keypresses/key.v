@@ -1,9 +1,9 @@
 
 module keypad_led(
-    input clk,          // clock input
-    input [1:0] row,    // row select input
+    input clk,          	// clock input
+    input [1:0] row,    	// row select input
     output [1:0] col,    // column output
-    output [3:0] leds    // LED outputs
+    output [3:0] leds    	// LED outputs
 );
 
 // Declare internal wires and registers
@@ -23,17 +23,17 @@ end
 
 // Update the column value based on the row select input
 always @(posedge clk) begin
-    col_synced <= col_next;
+    col <= col_next;
 end
 
 // Logic for updating the column and LED values based on the keypad input
 always @(*) begin
-    case({row, col_synced})
-        4'b10_00: begin col_next = 2'b01; leds_next = 4'b0001; end
+    case({row, col})
+        4'b10_10: begin col_next = 2'b01; leds_next = 4'b0001; end
         4'b10_01: begin col_next = 2'b10; leds_next = 4'b0010; end
         4'b01_10: begin col_next = 2'b01; leds_next = 4'b0100; end
-        4'b01_11: begin col_next = 2'b10; leds_next = 4'b1000; end
-        default: begin col_next = 2'b00; leds_next = 4'b0000; end
+        4'b01_01: begin col_next = 2'b10; leds_next = 4'b1000; end
+        default: begin col_next = 2'b01; leds_next = 4'b0000; end
     endcase
 end
 
@@ -54,10 +54,10 @@ module top(input CLK, PMODL3, PMODL4, output PMODL1, PMODL2, PMOD2, PMOD4, PMOD6
 	assign row[1] = PMODL4;
 	assign PMODL1 = col[0];
 	assign PMODL2 = col[1];
-	assign PMOD8 = ^leds[0];
-	assign PMOD6 = ^leds[1];
-	assign PMOD4 = ^leds[2];	
-	assign PMOD2 = ^leds[3];
+	assign PMOD2 = leds[0];
+	assign PMOD4 = leds[1];
+	assign PMOD6 = leds[2];	
+	assign PMOD8 = leds[3];
 	
 	keypad_led kp (
 		.clk (CLK),
