@@ -1,62 +1,75 @@
-/* PMOD2 unused */
-module top(input CLK, PMODL1, PMODL2, output PMODL3, PMODL4, PMOD1, PMOD3, PMOD4, PMOD5, PMOD6, PMOD7, PMOD8 );
 
-	reg [6:0] leds;
-	assign PMOD7 = ~leds[0];
-	assign PMOD5 = ~leds[1];
-	assign PMOD3 = ~leds[2];
-	assign PMOD1 = ~leds[3];
-	assign PMOD8 = ~leds[4];
-	assign PMOD6 = ~leds[5];
-	assign PMOD4 = ~leds[6];
-	
-	parameter CHECK_LINE1 = 1;
-	parameter CHECK_LINE2 = 2;
-	parameter CHECK_LINE3 = 4;
-	parameter CHECK_LINE4 = 8;
+module keypad_led(
+    input clk,          // clock input
+    input [1:0] row,    // row select input
+    output [1:0] col,    // column output
+    output [3:0] leds    // LED outputs
+);
 
-	reg [3:0] state;
+// Declare internal wires and registers
+reg [3:0] leds_next;
+reg [1:0] col_synced;
+reg [1:0] col_next;
 
-	initial begin
-		leds <= 0;
-		state = CHECK_LINE1;
-	end
-	
-	always @(posedge CLK)
-	begin
-		case( state )
-			CHECK_LINE1 : begin
-				PMODL3 = 1;
-				PMODL4 = 0;
-				if (PMODL1==1) begin
-					leds <= 1;
-				end
-				else if (PMODL2==1) begin
-					leds <= 2;
-				end
-				state = CHECK_LINE2;
-			end
-			CHECK_LINE2 : begin
-				PMODL3 = 0;
-				PMODL4 = 1;
-				if (PMODL1==1) begin
-					leds <= 4;
-				end
-				else if (PMODL2==1) begin
-					leds <= 8;
-				end
-				state = CHECK_LINE3;			
-			end
-			CHECK_LINE3 : begin
-				state = CHECK_LINE4;
-			end
-			CHECK_LINE4 : begin
-				// Restart line check loop next clock
-				state = CHECK_LINE1;
-			end
-			default	: begin end
-		endcase
-		
-	end
+initial begin
+	leds = 4'b0000;
+	leds_next = 4'b0000;
+end
+
+// Assign the current LED values to the LED outputs
+always @(*) begin
+    leds = leds_next;
+end
+
+// Update the column value based on the row select input
+always @(posedge clk) begin
+    col_synced <= col_next;
+end
+
+// Logic for updating the column and LED values based on the keypad input
+always @(*) begin
+    case({row, col_synced})
+        4'b10_00: begin col_next = 2'b01; leds_next = 4'b0001; end
+        4'b10_01: begin col_next = 2'b10; leds_next = 4'b0010; end
+        4'b01_10: begin col_next = 2'b01; leds_next = 4'b0100; end
+        4'b01_11: begin col_next = 2'b10; leds_next = 4'b1000; end
+        default: begin col_next = 2'b00; leds_next = 4'b0000; end
+    endcase
+end
+
 endmodule
+
+
+
+module top(input CLK, PMODL3, PMODL4, output PMODL1, PMODL2, PMOD2, PMOD4, PMOD6, PMOD8  ); /* PMOD1, PMOD2, PMOD3, PMOD4, PMOD5, PMOD6, PMOD7, PMOD8 */
+	/* LEDs */
+	/* PMOD8, PMOD6, PMOD4, PMOD2, PMOD7, PMOD5, PMOD3, PMOD1 */
+	/* check lines 	PMODL2, PMODL4 */
+	/* scan lines PMODL1 and PMODL3  (B3, B6) to read off key presses */
+	// Declare internal wires and registers
+	reg [3:0] leds;
+	reg [1:0] col;
+	reg [1:0] row;
+	assign row[0] = PMODL3;
+	assign row[1] = PMODL4;
+	assign PMODL1 = col[0];
+	assign PMODL2 = col[1];
+	assign PMOD8 = ^leds[0];
+	assign PMOD6 = ^leds[1];
+	assign PMOD4 = ^leds[2];	
+	assign PMOD2 = ^leds[3];
+	
+	keypad_led kp (
+		.clk (CLK),
+		.row ( row ),
+		.col ( col ),
+		.leds ( leds )
+		);
+		
+endmodule
+
+
+
+
+
 
