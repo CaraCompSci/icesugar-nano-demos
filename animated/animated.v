@@ -1,9 +1,8 @@
 module top(input CLK, output LED, PMOD1, PMOD2, PMOD3, PMOD4, PMOD5, PMOD6, PMOD7, PMOD8);
 	reg [31:0] counter;
 	reg [7:0] leds;
-	reg [7:0] shifted_leds;
-	reg [3:0] shift;
-	reg [3:0] shift_next;
+	reg [7:0] leds_next;
+	reg [0:0] direction;
 	
 	assign PMOD7 = !leds[7];
 	assign PMOD5 = !leds[6];
@@ -18,26 +17,36 @@ module top(input CLK, output LED, PMOD1, PMOD2, PMOD3, PMOD4, PMOD5, PMOD6, PMOD
 	
 	initial begin
 		counter = 0;
-		shift_next = 4;
-		shifted_leds = 8'b00010000;
+		leds = 1;
+		direction = 1;
+		leds_next = 1;
 	end
 	
 	always @ (posedge CLK) begin
-		leds <= shifted_leds;
-		shift <= shift_next;
 		counter <= counter + 1;
-	end
-	
-	always @ (counter[24]) begin
-		if( shift<7 ) begin
-			shift_next <= shift + 1;
-			shifted_leds <= leds << 1;
+		if (counter[10] && !counter[19]) begin
+			leds <= leds_next;
 		end
-		else begin 
-			shift_next <= 0;
-			shifted_leds <= 8'b00000001;
+		if (counter[19]) begin
+			if( direction ) begin
+				if (leds == 'b10000000 ) begin
+					leds_next <= leds >> 1;
+					direction <= 0;
+				end else begin
+					leds_next <= leds << 1;		
+				end
+			end else begin
+				if (leds == 'b00000001 ) begin
+					leds_next <= leds << 1;
+					direction <= 1;
+				end else begin
+					leds_next <= leds >> 1;		
+				end
+			end
 		end
+		
 	end
 	
 endmodule
+
 
