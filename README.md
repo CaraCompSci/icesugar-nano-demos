@@ -7,3 +7,5 @@ Flashes LED on board the icesugar-nano
 ## flashy
 Assumes you have the PMOD-LED board (8 LEDs) attached to the 12 pin PMOD connector of the icesugar-nano. It will count in binary. Onboard LED will also flash.
 
+## Animated
+LED chaser demo using the PMOD-LED (8 LEDs) attached to the 12 pin PMOD connector of the icesugar-nano. Onboard LED will also flash.
