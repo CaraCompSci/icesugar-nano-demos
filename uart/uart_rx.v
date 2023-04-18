@@ -9,10 +9,11 @@ module uart_rx (
     output reg data_valid
 );
 
-// Set your desired baud rate
+// Set your desired baud rate and correct FPGA clock rate
 parameter BAUD_RATE = 115200;
 parameter CLK_FREQ = 12000000;
 parameter COUNTER_MAX = CLK_FREQ / BAUD_RATE - 1;
+parameter COUNTER_MID_BIT = COUNTER_MAX / 2;
 
 reg [31:0] counter = 0;
 reg [3:0] bit_count = 0;
@@ -30,12 +31,12 @@ always @(posedge clk or posedge reset) begin
             0: begin // idle
                 if (!rx) begin // Start bit detected
                     state <= 1;
-                    counter <= COUNTER_MAX / 2;
+                    counter <= 0;
                     rts <= cts; // Update RTS based on CTS value
                 end
             end
             1: begin // receiving
-                if (counter == COUNTER_MAX) begin
+                if (counter == COUNTER_MID_BIT) begin
                     counter <= 0;
                     data_out[bit_count] <= rx;
                     bit_count <= bit_count + 1;
