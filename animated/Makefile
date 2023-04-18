@@ -1,4 +1,4 @@
-file = animated
+file = top
 pcf  = io.pcf
 
 build:
