@@ -1,4 +1,4 @@
-`include "uart_send.v"
+`include "uart_rx.v"
 `include "ram_block.v"
 
 
@@ -7,29 +7,36 @@ module top(input CLK, output PMODL1, PMODL2, PMODL3, PMODL4, PMODR1, PMODR2, PMO
 	reg [7:0] leds;
 	reg [7:0] leds_next;
 	reg [0:0] direction;
-		
-	//assign PMODR1 = !leds[7];
-	assign PMODR2 = !leds[6];
-	//assign PMODR3 = !leds[5];
-	assign PMODR4 = !leds[4];
-	assign PMODL4 = !leds[3];
-	assign PMODL3 = !leds[2];
-	assign PMODL2 = !leds[1];
-	assign PMODL1 = !leds[0];
-
+	
+	// 8x LED PMOD
+	assign PMOD7 = !leds[7];
+	assign PMOD5 = !leds[6];
+	assign PMOD3 = !leds[5];
+	assign PMOD1 = !leds[4];
+	assign PMOD8 = !leds[3];
+	assign PMOD6 = !leds[2];
+	assign PMOD4 = !leds[1];
+	assign PMOD2 = !leds[0];
+	
     	reg [0:0] reset; // Active-high reset IN
     	reg [0:0] tx_data_ready; // Signals new data to transmit IN
     	reg [7:0] tx_data; // Data to transmit IN
-   	//reg [0:0] ttx; // Transmitted data  OUT
     	reg [0:0] tx_busy; // Indicates when the UART is transmitting OUT
- 
+    	
+	// USB<-->SERIAL UART PMOD	
+	assign PMODL4 = !leds[3];  // C5 - TXD
+	assign PMODL3 = !leds[2];  // B6 - RXD
+	assign PMODL2 = !leds[1];  // A3 - RTS#
+	assign PMODL1 = !leds[0];  // B3 - CTS#
+
+	// RAM block registers 
      	reg [7:0] address;
         reg [7:0] data_in;
         reg write_enable;
     	reg [7:0] data_out;
     	
     		
-	uart uart_sender ( .clk (CLK), .reset (reset), .tx_data_ready (tx_data_ready), .tx_data (tx_data), .tx (PMODR1), .tx_busy (tx_busy) );
+	//uart uart_rx ( .clk (CLK), .reset (reset), .tx_data_ready (tx_data_ready), .tx_data (tx_data), .tx (PMODR1), .tx_busy (tx_busy) );
  	ram_block send_buffer ( .clk (CLK), .address (address), .data_in (data_in), .write_enable (write_enable), .data_out( data_out) );
  
 	initial begin
