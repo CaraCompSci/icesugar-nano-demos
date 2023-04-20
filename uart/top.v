@@ -3,10 +3,6 @@
 
 
 module top(input CLK, output PMODL1, PMODL2, PMODL3, PMODL4, PMODR1, PMODR2, PMODR4 );
-	reg [31:0] counter;
-	reg [7:0] leds;
-	reg [7:0] leds_next;
-	reg [0:0] direction;
 	
 	// 8x LED PMOD
 	assign PMOD7 = !leds[7];
@@ -17,28 +13,28 @@ module top(input CLK, output PMODL1, PMODL2, PMODL3, PMODL4, PMODR1, PMODR2, PMO
 	assign PMOD6 = !leds[2];
 	assign PMOD4 = !leds[1];
 	assign PMOD2 = !leds[0];
-	
-    	reg [0:0] reset; // Active-high reset IN
-    	reg [0:0] tx_data_ready; // Signals new data to transmit IN
-    	reg [7:0] tx_data; // Data to transmit IN
-    	reg [0:0] tx_busy; // Indicates when the UART is transmitting OUT
+
+	reg [31:0] counter;
+	reg [7:0] leds;
+	reg [7:0] leds_next;
+	reg [0:0] direction;
+
     	
 	// USB<-->SERIAL UART PMOD	
 	assign PMODL4 = !leds[3];  // C5 - TXD
 	assign PMODL3 = !leds[2];  // B6 - RXD
 	assign PMODL2 = !leds[1];  // A3 - RTS#
 	assign PMODL1 = !leds[0];  // B3 - CTS#
-
-	// RAM block registers 
-     	reg [7:0] address;
-        reg [7:0] data_in;
-        reg write_enable;
-    	reg [7:0] data_out;
-    	
-    		
-	//uart uart_rx ( .clk (CLK), .reset (reset), .tx_data_ready (tx_data_ready), .tx_data (tx_data), .tx (PMODR1), .tx_busy (tx_busy) );
- 	ram_block send_buffer ( .clk (CLK), .address (address), .data_in (data_in), .write_enable (write_enable), .data_out( data_out) );
- 
+	
+    	reg [0:0] reset; // Active-high reset IN
+    	reg [0:0] tx_data_ready; // Signals new data to transmit IN
+    	reg [7:0] tx_data; // Data to transmit IN
+    	reg [0:0] tx_busy; // Indicates when the UART is transmitting OUT
+    	wire [7:0] byte_buffer_in;
+    	wire valid_byte;
+    	    	
+	uart_rx uart_in ( .clk (CLK), .reset (reset), .rx (PMODL4), .cts (PMODL1), .rts (PMODL2), .data_read (byte_buffer_in), .valid_byte(valid_byte) );
+ 	
 	initial begin
 		counter = 0;
 		leds = 1;
@@ -47,7 +43,12 @@ module top(input CLK, output PMODL1, PMODL2, PMODL3, PMODL4, PMODR1, PMODR2, PMO
 		address = 0;
 	end
 	
-	always @ (posedge CLK) begin
+	always @ (posedge valid_byte ) begin
+		leds <= byte_buffer_in;
+	end
+	
+	
+/*	always @ (posedge CLK) begin
 		counter <= counter + 1;
 		if (counter[10] && !counter[19]) begin
 			leds <= leds_next;
@@ -71,16 +72,9 @@ module top(input CLK, output PMODL1, PMODL2, PMODL3, PMODL4, PMODR1, PMODR2, PMO
 		end
 		
 	end
-	
+*/	
 
-    	
-
-	always @ (posedge CLK) begin
-		ttx_data <= 'd67; // ASCII capital C
-		ttx_data_ready <= 1;
-		treset <= 0;
-	end
-	
+    		
 endmodule
 
 
