@@ -5517,7 +5517,7 @@
         },
         "PMODL2": {
           "direction": "output",
-          "bits": [ "1" ]
+          "bits": [ "0" ]
         },
         "PMODL3": {
           "direction": "output",
@@ -5559,7 +5559,7 @@
         },
         "PMODL2": {
           "hide_name": 0,
-          "bits": [ "1" ],
+          "bits": [ "0" ],
           "attributes": {
             "src": "top.v:5"
           }
@@ -5659,7 +5659,7 @@
           "hide_name": 0,
           "bits": [ "x" ],
           "attributes": {
-            "src": "top.v:37|uart_rx.v:83"
+            "src": "top.v:37|uart_rx.v:82"
           }
         },
         "uart_in.clk": {
@@ -5700,7 +5700,7 @@
         },
         "uart_in.rts": {
           "hide_name": 0,
-          "bits": [ "1" ],
+          "bits": [ "0" ],
           "attributes": {
             "src": "top.v:37|uart_rx.v:7"
           }

@@ -38,7 +38,7 @@ initial begin
 	error = 0;
 	bit_count =0;
 	rx_state = WAIT;
-	rts = 1'b1; // Assert RTS signal
+	rts = 1'b0; // Assert RTS signal
 	uart_clock = 0;
 end
 
@@ -58,8 +58,7 @@ always @( posedge uart_clock or posedge reset ) begin
         bit_count <= 0;
  	valid_byte = 0;
 	state <= WAIT;
-        rts <= 1'b1; // Assert RTS signal
-        //data_valid <= 1'b0;
+        rts <= 1'b0; // Assert RTS signal
     end 
     else begin
         case (rx_state)
@@ -73,7 +72,7 @@ always @( posedge uart_clock or posedge reset ) begin
             		error = 1;
             		valid_byte = 0;
             		counter = 0;
-  		        rts <= 1'b0; // Unassert RTS signal   	
+  		        rts <= 1'b1; // Unassert RTS signal   	
             	end
             end
             START_BIT: begin
@@ -109,7 +108,7 @@ always @( posedge uart_clock or posedge reset ) begin
 	      		error = 1;
             		valid_byte = 0;
             		counter = 0;
-            		rts <= 1'b0; // Unassert RTS signal   	
+            		rts <= 1'b1; // Unassert RTS signal   	
             	end
             end            
             ERROR: begin            
@@ -127,7 +126,7 @@ always @(posedge clk) begin
     else begin
     	uart_clock<=1;
     end
-    if( counter == TICKS_PER_UART_MAX) begin
+    if( counter >= TICKS_PER_UART_MAX) begin
     	counter <= 0;
     end
 end
