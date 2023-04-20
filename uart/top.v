@@ -32,8 +32,9 @@ module top(input CLK, output PMODL1, PMODL2, PMODL3, PMODL4, PMODR1, PMODR2, PMO
     	reg [0:0] tx_busy; // Indicates when the UART is transmitting OUT
     	wire [7:0] byte_buffer_in;
     	wire valid_byte;
+    	wire error;
     	    	
-	uart_rx uart_in ( .clk (CLK), .reset (reset), .rx (PMODL4), .cts (PMODL1), .rts (PMODL2), .data_read (byte_buffer_in), .valid_byte(valid_byte) );
+	uart_rx uart_in ( .clk (CLK), .reset (reset), .rx (PMODL4), .cts (PMODL1), .rts (PMODL2), .data_read (byte_buffer_in), .valid_byte(valid_byte), .error (error) );
  	
 	initial begin
 		counter = 0;
@@ -48,7 +49,7 @@ module top(input CLK, output PMODL1, PMODL2, PMODL3, PMODL4, PMODR1, PMODR2, PMO
 	end
 	
 	
-/*	always @ (posedge CLK) begin
+	always @ (error) begin
 		counter <= counter + 1;
 		if (counter[10] && !counter[19]) begin
 			leds <= leds_next;
@@ -72,7 +73,7 @@ module top(input CLK, output PMODL1, PMODL2, PMODL3, PMODL4, PMODR1, PMODR2, PMO
 		end
 		
 	end
-*/	
+	
 
     		
 endmodule
