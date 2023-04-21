@@ -2,7 +2,7 @@
 `include "ram_block.v"
 
 
-module top(input CLK, output PMODL1, PMODL2, PMODL3, PMODL4, PMODR1, PMODR2, PMODR4 );
+module top(input CLK, PMODL1, PMODL3 output PMOD1, PMOD2, PMOD3, PMOD4, PMOD5, PMOD6, PMOD7, PMOD8, PMODL2, PMODL4 );
 	
 	// 8x LED PMOD
 	assign PMOD7 = !leds[7];
@@ -19,22 +19,18 @@ module top(input CLK, output PMODL1, PMODL2, PMODL3, PMODL4, PMODR1, PMODR2, PMO
 	reg [7:0] leds_next;
 	reg [0:0] direction;
 
-    	
-	// USB<-->SERIAL UART PMOD	
-	assign PMODL4 = !leds[3];  // C5 - TXD
-	assign PMODL3 = !leds[2];  // B6 - RXD
-	assign PMODL2 = !leds[1];  // A3 - RTS#
-	assign PMODL1 = !leds[0];  // B3 - CTS#
-	
-    	reg [0:0] reset; // Active-high reset IN
-    	reg [0:0] tx_data_ready; // Signals new data to transmit IN
-    	reg [7:0] tx_data; // Data to transmit IN
-    	reg [0:0] tx_busy; // Indicates when the UART is transmitting OUT
+
+    	reg [0:0] reset; // Active-high reset
     	wire [7:0] byte_buffer_in;
     	wire valid_byte;
     	wire error;
-    	    	
-	uart_rx uart_in ( .clk (CLK), .reset (reset), .rx (PMODL4), .cts (PMODL1), .rts (PMODL2), .data_read (byte_buffer_in), .valid_byte(valid_byte), .error (error) );
+
+	// USB<-->SERIAL UART PMOD	
+	// C5 / PMODL4 - TXD
+	// B6 / PMODL3 - RXD
+	// A3 / PMODL2 - RTS#
+	// B3 / PMODL1 - CTS# 
+	uart_rx uart_in ( .clk (CLK), .reset (reset), .rx (PMODL3), .cts (PMODL1), .rts (PMODL2), .data_read (byte_buffer_in), .valid_byte(valid_byte), .error (error) );
  	
 	initial begin
 		counter = 0;
@@ -49,7 +45,7 @@ module top(input CLK, output PMODL1, PMODL2, PMODL3, PMODL4, PMODR1, PMODR2, PMO
 	end
 	
 	
-	always @ (error) begin
+	always @ (error==1) begin
 		counter <= counter + 1;
 		if (counter[10] && !counter[19]) begin
 			leds <= leds_next;

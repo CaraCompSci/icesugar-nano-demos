@@ -23,13 +23,13 @@ parameter START_BIT			= 3'b010;
 parameter FIRST_BIT_READ		= 3'b011;
 parameter DATA_BIT_READ			= 3'b100;
 parameter LAST_BIT_READ			= 3'b101;
-parameter STOP_BIT			= 3'b110;
+
 
 reg [2:0] rx_state = WAIT;
 reg [2:0] tx_state = WAIT;
 
 reg [31:0] counter = 0;
-reg [4:0] bit_count = 0;
+reg [3:0] bit_count = 0;
 reg state = WAIT;
 reg uart_clock = 0;
 
@@ -79,18 +79,18 @@ always @( posedge uart_clock or posedge reset ) begin
             	// Now in:
             	state = FIRST_BIT_READ;
             	data_read[0] = rx;
-            	bit_counter = 0;
+            	bit_count = 0;
             end
             FIRST_BIT_READ: begin
             	// Now in:
             	state = DATA_BIT_READ;
             	data_read[bit_counter+1] <= rx;
-            	bit_counter <= bit_counter + 1;
+            	bit_count <= bit_count + 1;
             end
             DATA_BIT_READ: begin
             	if( bit_counter < 6 ) begin
             		data_read[bit_counter+1] <= rx;	
-		   	bit_counter <= bit_counter + 1;
+		   	bit_count <= bit_count + 1;
    	            	// Now in:
    	            	if( bit_counter == 7) begin
 			   	state = LAST_BIT_READ;
