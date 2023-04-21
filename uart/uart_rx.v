@@ -27,12 +27,11 @@ parameter LAST_BIT_READ			= 3'b101;
 parameter ERROR				= 3'b110;
 
 
-reg [2:0] rx_state = WAIT;
-reg [2:0] tx_state = WAIT;
+reg [2:0] rx_state;
+reg [2:0] tx_state;
 
 reg [31:0] counter = 0;
 reg [3:0] bit_count = 0;
-reg state = WAIT;
 reg uart_clock = 0;
 
 initial begin
@@ -40,11 +39,20 @@ initial begin
 	error = 0;
 	bit_count =0;
 	rx_state = WAIT;
+	tx_state = WAIT;
 	rts = 1'b0; // Assert RTS signal low, is set
 	uart_clock = 0;
+	data_read = 8'b00000000;
 end
 
-always @(negedge rx) begin
+always @(negedge rx ) begin
+	if  (reset) begin
+     		counter <= 0;
+   		bit_count <= 0;
+ 		valid_byte = 0;
+		rx_state <= WAIT;
+    		rts <= 1'b0; // Assert RTS signal, low is set	
+	end
 	if ( rx_state == WAIT ) begin
 		// Start bit of next byte.
 		rx_state <= START_BIT_FALLING_EDGE;
@@ -59,7 +67,7 @@ always @( posedge uart_clock or posedge reset ) begin
         counter <= 0;
         bit_count <= 0;
  	valid_byte = 0;
-	state <= WAIT;
+	rx_state <= WAIT;
         rts <= 1'b0; // Assert RTS signal, low is set
     end 
     else begin
@@ -67,50 +75,50 @@ always @( posedge uart_clock or posedge reset ) begin
             START_BIT_FALLING_EDGE: begin
             	// check rx is low for start bit, or trigger error
             	if( rx == 0 ) begin
-            		state <= START_BIT;	
+            		rx_state <= START_BIT;	
             	end
             	else begin
-            		state = ERROR;
-            		error = 1;
-            		valid_byte = 0;
-            		counter = 0;
+            		rx_state <= ERROR;
+            		error <= 1;
+            		valid_byte <= 0;
+            		counter <= 0;
   		        rts <= 1'b1; // Unassert RTS signal   	
             	end
             end
             START_BIT: begin
             	// Now in:
-            	state = FIRST_BIT_READ;
-            	data_read[0] = rx;
-            	bit_count = 0;
+            	rx_state <= FIRST_BIT_READ;
+            	data_read[0] <= rx;
+            	bit_count <= 0;
             end
             FIRST_BIT_READ: begin
             	// Now in:
-            	state = DATA_BIT_READ;
+            	rx_state <= DATA_BIT_READ;
             	data_read[bit_count+1] <= rx;
             	bit_count <= bit_count + 1;
             end
             DATA_BIT_READ: begin
-            	if( bit_count < 6 ) begin
-            		data_read[bit_count+1] <= rx;	
+            	if( bit_count < 7 ) begin
+            		data_read[bit_count+1] = rx;	
 		   	bit_count <= bit_count + 1;
    	            	// Now in:
    	            	if( bit_count == 7) begin
-			   	state = LAST_BIT_READ;
-			   	valid_byte = 1;
+			   	rx_state <= LAST_BIT_READ;
+			   	valid_byte <= 1;
 			end
 		end            
             end
             LAST_BIT_READ: begin
             	// check for high stop bit
             	if( rx == 1) begin
-            		state = WAIT; // start wait for next new byte
+            		rx_state <= WAIT; // start wait for next new byte
             	end
             	else begin
-                     	state = ERROR;
-	      		error = 1;
-            		valid_byte = 0;
-            		counter = 0;
-            		bit_count = 0;
+                     	rx_state <= ERROR;
+	      		error <= 1;
+            		valid_byte <= 0;
+            		counter <= 0;
+            		bit_count <= 0;
             		rts <= 1'b1; // Unassert RTS signal   	
             	end
             end            
@@ -123,14 +131,9 @@ end
 
 always @(posedge clk) begin
     counter <= counter + 1;
-    if (counter<=TICKS_PER_UART_HALF_CLOCK_CYCLE ) begin
-    	uart_clock<=0;
-    end
-    else begin
-    	uart_clock<=1;
-    end
-    if( counter >= TICKS_PER_UART_MAX) begin
+    if( counter == TICKS_PER_UART_HALF_CLOCK_CYCLE) begin
     	counter <= 0;
+    	uart_clock <= ~uart_clock;
     end
 end
 
