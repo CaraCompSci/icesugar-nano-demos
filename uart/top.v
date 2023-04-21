@@ -3,6 +3,11 @@
 
 
 module top(input CLK , PMODL2, PMODL4, output PMOD1, PMOD2, PMOD3, PMOD4, PMOD5, PMOD6, PMOD7, PMOD8, PMODL1, PMODL3 );
+
+	reg [31:0] counter;
+	reg [7:0] leds;
+	reg [7:0] leds_next;
+	reg [0:0] direction;
 	
 	// 8x LED PMOD
 	assign PMOD7 = !leds[7];
@@ -14,21 +19,19 @@ module top(input CLK , PMODL2, PMODL4, output PMOD1, PMOD2, PMOD3, PMOD4, PMOD5,
 	assign PMOD4 = !leds[1];
 	assign PMOD2 = !leds[0];
 
-	reg [31:0] counter;
-	reg [7:0] leds;
-	reg [7:0] leds_next;
-	reg [0:0] direction;
-
 	wire valid_byte;
     	wire [7:0] byte_buffer_in;
     	wire error; 
     	reg reset; // Active-high reset
-    	
+    	wire rts;
+    	wire tx;
+    	assign PMODL1 = rts;
+    	assign PMODL3 = tx;
 	// USB<-->SERIAL UART PMOD	
-	// C5 / PMODL4 - TXD
-	// B6 / PMODL3 - RXD
-	// A3 / PMODL2 - RTS#
-	// B3 / PMODL1 - CTS# 
+	// C5 / PMODL3 - TXD
+	// B6 / PMODL4 - RXD
+	// A3 / PMODL1 - RTS#
+	// B3 / PMODL2 - CTS# 
 	uart_rx uart_in ( .clk (CLK), .reset (reset), .rx (PMODL4), .tx ( PMODL3 ), .cts (PMODL2), .rts (PMODL1), .data_read (byte_buffer_in), .valid_byte (valid_byte), .error (error) );
 	
  	
@@ -38,6 +41,8 @@ module top(input CLK , PMODL2, PMODL4, output PMOD1, PMOD2, PMOD3, PMOD4, PMOD5,
 		direction = 1;
 		leds_next = 1;
 		reset = 0;
+		rts = 1; // low is off
+		tx = 0;
 	end
 	
 	
