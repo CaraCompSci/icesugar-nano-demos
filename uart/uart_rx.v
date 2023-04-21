@@ -5,6 +5,7 @@ module uart_rx (
     input wire rx,
     input wire cts, // Clear to Send (CTS) input
     output reg rts, // Request to Send (RTS) output
+    output reg tx,
     output reg [7:0] data_read,
     output reg valid_byte,
     output reg error
@@ -23,6 +24,7 @@ parameter START_BIT			= 3'b010;
 parameter FIRST_BIT_READ		= 3'b011;
 parameter DATA_BIT_READ			= 3'b100;
 parameter LAST_BIT_READ			= 3'b101;
+parameter ERROR				= 3'b110;
 
 
 reg [2:0] rx_state = WAIT;
@@ -38,7 +40,7 @@ initial begin
 	error = 0;
 	bit_count =0;
 	rx_state = WAIT;
-	rts = 1'b0; // Assert RTS signal
+	rts = 1'b0; // Assert RTS signal low, is set
 	uart_clock = 0;
 end
 
@@ -58,7 +60,7 @@ always @( posedge uart_clock or posedge reset ) begin
         bit_count <= 0;
  	valid_byte = 0;
 	state <= WAIT;
-        rts <= 1'b0; // Assert RTS signal
+        rts <= 1'b0; // Assert RTS signal, low is set
     end 
     else begin
         case (rx_state)
@@ -84,15 +86,15 @@ always @( posedge uart_clock or posedge reset ) begin
             FIRST_BIT_READ: begin
             	// Now in:
             	state = DATA_BIT_READ;
-            	data_read[bit_counter+1] <= rx;
+            	data_read[bit_count+1] <= rx;
             	bit_count <= bit_count + 1;
             end
             DATA_BIT_READ: begin
-            	if( bit_counter < 6 ) begin
-            		data_read[bit_counter+1] <= rx;	
+            	if( bit_count < 6 ) begin
+            		data_read[bit_count+1] <= rx;	
 		   	bit_count <= bit_count + 1;
    	            	// Now in:
-   	            	if( bit_counter == 7) begin
+   	            	if( bit_count == 7) begin
 			   	state = LAST_BIT_READ;
 			   	valid_byte = 1;
 			end
@@ -108,6 +110,7 @@ always @( posedge uart_clock or posedge reset ) begin
 	      		error = 1;
             		valid_byte = 0;
             		counter = 0;
+            		bit_count = 0;
             		rts <= 1'b1; // Unassert RTS signal   	
             	end
             end            
