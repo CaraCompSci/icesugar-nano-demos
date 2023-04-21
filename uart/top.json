@@ -5511,11 +5511,11 @@
           "direction": "input",
           "bits": [ 2 ]
         },
-        "PMODL1": {
+        "PMODL2": {
           "direction": "input",
           "bits": [ 3 ]
         },
-        "PMODL3": {
+        "PMODL4": {
           "direction": "input",
           "bits": [ 4 ]
         },
@@ -5551,11 +5551,11 @@
           "direction": "output",
           "bits": [ "1" ]
         },
-        "PMODL2": {
+        "PMODL1": {
           "direction": "output",
           "bits": [ "0" ]
         },
-        "PMODL4": {
+        "PMODL3": {
           "direction": "output",
           "bits": [ "x" ]
         }
@@ -5628,28 +5628,28 @@
         },
         "PMODL1": {
           "hide_name": 0,
-          "bits": [ 3 ],
+          "bits": [ "0" ],
           "attributes": {
             "src": "top.v:5"
           }
         },
         "PMODL2": {
           "hide_name": 0,
-          "bits": [ "0" ],
+          "bits": [ 3 ],
           "attributes": {
             "src": "top.v:5"
           }
         },
         "PMODL3": {
           "hide_name": 0,
-          "bits": [ 4 ],
+          "bits": [ "x" ],
           "attributes": {
             "src": "top.v:5"
           }
         },
         "PMODL4": {
           "hide_name": 0,
-          "bits": [ "x" ],
+          "bits": [ 4 ],
           "attributes": {
             "src": "top.v:5"
           }

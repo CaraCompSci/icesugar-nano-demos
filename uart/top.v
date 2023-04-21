@@ -2,7 +2,7 @@
 `include "ram_block.v"
 
 
-module top(input CLK , PMODL1, PMODL3, output PMOD1, PMOD2, PMOD3, PMOD4, PMOD5, PMOD6, PMOD7, PMOD8, PMODL2, PMODL4 );
+module top(input CLK , PMODL2, PMODL4, output PMOD1, PMOD2, PMOD3, PMOD4, PMOD5, PMOD6, PMOD7, PMOD8, PMODL1, PMODL3 );
 	
 	// 8x LED PMOD
 	assign PMOD7 = !leds[7];
@@ -29,7 +29,7 @@ module top(input CLK , PMODL1, PMODL3, output PMOD1, PMOD2, PMOD3, PMOD4, PMOD5,
 	// B6 / PMODL3 - RXD
 	// A3 / PMODL2 - RTS#
 	// B3 / PMODL1 - CTS# 
-	uart_rx uart_in ( .clk (CLK), .reset (reset), .rx (PMODL3), .tx ( PMODL4 ), .cts (PMODL1), .rts (PMODL2), .data_read (byte_buffer_in), .valid_byte (valid_byte), .error (error) );
+	uart_rx uart_in ( .clk (CLK), .reset (reset), .rx (PMODL4), .tx ( PMODL3 ), .cts (PMODL2), .rts (PMODL1), .data_read (byte_buffer_in), .valid_byte (valid_byte), .error (error) );
 	
  	
 	initial begin
