@@ -51,7 +51,7 @@ always @(negedge rx ) begin
    		bit_count <= 0;
  		valid_byte = 0;
 		rx_state <= WAIT;
-    		rts <= 1'b0; // Assert RTS signal, low is set	
+    		rts <= 0; // Assert RTS signal, low is set	
 	end
 	if ( rx_state == WAIT ) begin
 		// Start bit of next byte.
@@ -68,7 +68,7 @@ always @( posedge uart_clock or posedge reset ) begin
         bit_count <= 0;
  	valid_byte = 0;
 	rx_state <= WAIT;
-        rts <= 1'b0; // Assert RTS signal, low is set
+        rts <= 0; // Assert RTS signal, low is set
     end 
     else begin
         case (rx_state)
@@ -82,7 +82,7 @@ always @( posedge uart_clock or posedge reset ) begin
             		error <= 1;
             		valid_byte <= 0;
             		counter <= 0;
-  		        rts <= 1'b1; // Unassert RTS signal   	
+  		        rts <= 1; // Unassert RTS signal   	
             	end
             end
             START_BIT: begin
@@ -119,7 +119,7 @@ always @( posedge uart_clock or posedge reset ) begin
             		valid_byte <= 0;
             		counter <= 0;
             		bit_count <= 0;
-            		rts <= 1'b1; // Unassert RTS signal   	
+            		rts <= 1; // Unassert RTS signal   	
             	end
             end            
             ERROR: begin            
