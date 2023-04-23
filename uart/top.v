@@ -2,7 +2,7 @@
 `include "ram_block.v"
 
 
-module top(input CLK , PMODL2, PMODL4, output PMOD1, PMOD2, PMOD3, PMOD4, PMOD5, PMOD6, PMOD7, PMOD8, PMODL1, PMODL3 );
+module top(input wire CLK , PMODL2, PMODL4, output wire PMOD1, PMOD2, PMOD3, PMOD4, PMOD5, PMOD6, PMOD7, PMOD8, PMODL1, PMODL3 );
 
 	reg [31:0] counter;
 	reg [7:0] leds;
@@ -23,8 +23,6 @@ module top(input CLK , PMODL2, PMODL4, output PMOD1, PMOD2, PMOD3, PMOD4, PMOD5,
     	wire [7:0] byte_buffer_in;
     	wire error; 
     	reg reset; // Active-high reset
-    	wire rts;
-    	wire tx;
     	assign PMODL1 = rts;
     	assign PMODL3 = tx;
 	// USB<-->SERIAL UART PMOD	
@@ -41,8 +39,6 @@ module top(input CLK , PMODL2, PMODL4, output PMOD1, PMOD2, PMOD3, PMOD4, PMOD5,
 		direction = 1;
 		leds_next = 1;
 		reset = 0;
-		rts = 1; // low is off
-		tx = 0;
 	end
 	
 	

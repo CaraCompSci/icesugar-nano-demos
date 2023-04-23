@@ -5553,7 +5553,7 @@
         },
         "PMODL1": {
           "direction": "output",
-          "bits": [ "0" ]
+          "bits": [ "x" ]
         },
         "PMODL3": {
           "direction": "output",
@@ -5628,7 +5628,7 @@
         },
         "PMODL1": {
           "hide_name": 0,
-          "bits": [ "0" ],
+          "bits": [ "x" ],
           "attributes": {
             "src": "top.v:5"
           }
@@ -5665,14 +5665,14 @@
           "hide_name": 0,
           "bits": [ "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0" ],
           "attributes": {
-            "src": "top.v:17"
+            "src": "top.v:7"
           }
         },
         "direction": {
           "hide_name": 0,
           "bits": [ "1" ],
           "attributes": {
-            "src": "top.v:20"
+            "src": "top.v:10"
           }
         },
         "error": {
@@ -5686,14 +5686,14 @@
           "hide_name": 0,
           "bits": [ "1", "0", "0", "0", "0", "0", "0", "0" ],
           "attributes": {
-            "src": "top.v:18"
+            "src": "top.v:8"
           }
         },
         "leds_next": {
           "hide_name": 0,
           "bits": [ "1", "0", "0", "0", "0", "0", "0", "0" ],
           "attributes": {
-            "src": "top.v:19"
+            "src": "top.v:9"
           }
         },
         "reset": {
@@ -5703,18 +5703,32 @@
             "src": "top.v:25"
           }
         },
+        "rts": {
+          "hide_name": 0,
+          "bits": [ "x" ],
+          "attributes": {
+            "src": "top.v:26"
+          }
+        },
+        "tx": {
+          "hide_name": 0,
+          "bits": [ "x" ],
+          "attributes": {
+            "src": "top.v:27"
+          }
+        },
         "uart_in.bit_count": {
           "hide_name": 0,
           "bits": [ "0", "0", "0", "0" ],
           "attributes": {
-            "src": "top.v:32|uart_rx.v:34"
+            "src": "top.v:33|uart_rx.v:34"
           }
         },
         "uart_in.clk": {
           "hide_name": 0,
           "bits": [ 2 ],
           "attributes": {
-            "src": "top.v:32|uart_rx.v:3",
+            "src": "top.v:33|uart_rx.v:3",
             "unused_bits": "0"
           }
         },
@@ -5722,14 +5736,14 @@
           "hide_name": 0,
           "bits": [ "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0" ],
           "attributes": {
-            "src": "top.v:32|uart_rx.v:33"
+            "src": "top.v:33|uart_rx.v:33"
           }
         },
         "uart_in.cts": {
           "hide_name": 0,
           "bits": [ 3 ],
           "attributes": {
-            "src": "top.v:32|uart_rx.v:6",
+            "src": "top.v:33|uart_rx.v:6",
             "unused_bits": "0"
           }
         },
@@ -5737,35 +5751,35 @@
           "hide_name": 0,
           "bits": [ "0", "0", "0", "0", "0", "0", "0", "0" ],
           "attributes": {
-            "src": "top.v:32|uart_rx.v:9"
+            "src": "top.v:33|uart_rx.v:9"
           }
         },
         "uart_in.error": {
           "hide_name": 0,
           "bits": [ "0" ],
           "attributes": {
-            "src": "top.v:32|uart_rx.v:11"
+            "src": "top.v:33|uart_rx.v:11"
           }
         },
         "uart_in.reset": {
           "hide_name": 0,
           "bits": [ "0" ],
           "attributes": {
-            "src": "top.v:32|uart_rx.v:4"
+            "src": "top.v:33|uart_rx.v:4"
           }
         },
         "uart_in.rts": {
           "hide_name": 0,
-          "bits": [ "0" ],
+          "bits": [ "x" ],
           "attributes": {
-            "src": "top.v:32|uart_rx.v:7"
+            "src": "top.v:33|uart_rx.v:7"
           }
         },
         "uart_in.rx": {
           "hide_name": 0,
           "bits": [ 4 ],
           "attributes": {
-            "src": "top.v:32|uart_rx.v:5",
+            "src": "top.v:33|uart_rx.v:5",
             "unused_bits": "0"
           }
         },
@@ -5773,35 +5787,35 @@
           "hide_name": 0,
           "bits": [ "0", "0", "0" ],
           "attributes": {
-            "src": "top.v:32|uart_rx.v:30"
+            "src": "top.v:33|uart_rx.v:30"
           }
         },
         "uart_in.tx": {
           "hide_name": 0,
           "bits": [ "x" ],
           "attributes": {
-            "src": "top.v:32|uart_rx.v:8"
+            "src": "top.v:33|uart_rx.v:8"
           }
         },
         "uart_in.tx_state": {
           "hide_name": 0,
           "bits": [ "0", "0", "0" ],
           "attributes": {
-            "src": "top.v:32|uart_rx.v:31"
+            "src": "top.v:33|uart_rx.v:31"
           }
         },
         "uart_in.uart_clock": {
           "hide_name": 0,
           "bits": [ "0" ],
           "attributes": {
-            "src": "top.v:32|uart_rx.v:35"
+            "src": "top.v:33|uart_rx.v:35"
           }
         },
         "uart_in.valid_byte": {
           "hide_name": 0,
           "bits": [ "x" ],
           "attributes": {
-            "src": "top.v:32|uart_rx.v:10"
+            "src": "top.v:33|uart_rx.v:10"
           }
         },
         "valid_byte": {

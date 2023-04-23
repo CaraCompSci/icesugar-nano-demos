@@ -5,7 +5,7 @@ module uart_rx (
     input wire rx,
     input wire cts, // Clear to Send (CTS) input
     output reg rts, // Request to Send (RTS) output
-    output reg tx,
+    output wire tx,
     output reg [7:0] data_read,
     output reg valid_byte,
     output reg error
@@ -35,23 +35,22 @@ reg [3:0] bit_count = 0;
 reg uart_clock = 0;
 
 initial begin
-	counter = 0;
-	error = 0;
-	bit_count =0;
-	rx_state = WAIT;
-	tx_state = WAIT;
-	rts = 1'b0; // Assert RTS signal low, is set
-	uart_clock = 0;
-	data_read = 8'b00000000;
+	counter <= 0;
+	error <= 0;
+	bit_count <= 0;
+	rx_state <= WAIT;
+	tx_state <= WAIT;
+	uart_clock <= 0;
+	data_read <= 8'b00000000;
 end
 
 always @(negedge rx ) begin
 	if  (reset) begin
      		counter <= 0;
    		bit_count <= 0;
- 		valid_byte = 0;
+ 		valid_byte <= 0;
 		rx_state <= WAIT;
-    		rts <= 0; // Assert RTS signal, low is set	
+    		rts <= 1'b0; // Assert RTS signal, low is set	
 	end
 	if ( rx_state == WAIT ) begin
 		// Start bit of next byte.
@@ -66,9 +65,9 @@ always @( posedge uart_clock or posedge reset ) begin
     if (reset) begin
         counter <= 0;
         bit_count <= 0;
- 	valid_byte = 0;
+ 	valid_byte <= 0;
 	rx_state <= WAIT;
-        rts <= 0; // Assert RTS signal, low is set
+        rts <= 1'b0; // Assert RTS signal, low is set
     end 
     else begin
         case (rx_state)
@@ -82,7 +81,7 @@ always @( posedge uart_clock or posedge reset ) begin
             		error <= 1;
             		valid_byte <= 0;
             		counter <= 0;
-  		        rts <= 1; // Unassert RTS signal   	
+  		        rts <= 1'b1; // Unassert RTS signal   	
             	end
             end
             START_BIT: begin
@@ -119,7 +118,7 @@ always @( posedge uart_clock or posedge reset ) begin
             		valid_byte <= 0;
             		counter <= 0;
             		bit_count <= 0;
-            		rts <= 1; // Unassert RTS signal   	
+            		rts <= 1'b1; // Unassert RTS signal   	
             	end
             end            
             ERROR: begin            
