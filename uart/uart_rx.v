@@ -4,11 +4,12 @@ module uart_rx (
     input wire reset,
     input wire rx,
     input wire cts, // Clear to Send (CTS) input
-    output reg rts, // Request to Send (RTS) output
+    output wire rts, // Request to Send (RTS) output
     output wire tx,
     output reg [7:0] data_read,
     output reg valid_byte,
-    output reg error
+    output reg error,
+    output wire [7:0] debug 
 );
 
 // Set your desired baud rate and correct FPGA clock rate
@@ -37,6 +38,7 @@ reg [3:0] rx_state;
 reg [3:0] tx_state;
 reg [31:0] clk_counter;
 reg data_started;
+reg start_bit_detected;
 
 initial begin
 	clk_counter <= 0;
@@ -49,6 +51,7 @@ initial begin
 end
 
 always @(negedge rx ) begin
+	debug <= 8'b10101010; 	
 	if ( rx_state == WAIT ) begin
 		// Start bit of next byte.
 		start_bit_detected <= 1;
@@ -58,6 +61,7 @@ always @(negedge rx ) begin
 end
 
 always @( posedge clk or posedge reset ) begin
+    debug <= 8'b10011001; 	
     if (reset) begin
         clk_counter <= 0;
  	valid_byte <= 0;
@@ -68,9 +72,10 @@ always @( posedge clk or posedge reset ) begin
     else begin
         case (rx_state)
         	WAIT: begin
-			start_bit_detected <= 0; //reset this for next byte
-			rx_state <= START_BIT;
-		        clk_counter <= 0; // restart counter so we can time through the current.
+			if( start_bit_detected ) begin
+				start_bit_detected <= 0; //reset this for next byte
+				rx_state <= START_BIT;
+		        end
 	        end
 	        START_BIT: begin
         	    	if ( clk_counter == TICKS_UNTIL_UART_SAMPLE) begin
@@ -84,20 +89,24 @@ always @( posedge clk or posedge reset ) begin
         		if ( clk_counter == TICKS_PER_UART_BIT ) begin
         			clk_counter <= 0;
         			rx_state <= DATA_BIT_1;
+        			tx <= 0;
         		end
 	        end    
 	        DATA_BIT_1: begin
         	    	if ( clk_counter == TICKS_UNTIL_UART_SAMPLE) begin
 		            	data_read[0] <= rx;
+		            	tx <= rx;
        		   	end
         		if ( clk_counter == TICKS_PER_UART_BIT ) begin
         			clk_counter <= 0;
         			rx_state <= DATA_BIT_2;
+
         		end 
        		end
 	        DATA_BIT_2: begin
         	    	if ( clk_counter == TICKS_UNTIL_UART_SAMPLE) begin
 		            	data_read[1] <= rx;
+		            	tx <= rx;
        		   	end
         		if ( clk_counter == TICKS_PER_UART_BIT ) begin
         			clk_counter <= 0;
@@ -107,6 +116,7 @@ always @( posedge clk or posedge reset ) begin
 	        DATA_BIT_3: begin
         	    	if ( clk_counter == TICKS_UNTIL_UART_SAMPLE) begin
 		            	data_read[2] <= rx;
+		            	tx <= rx;
        		   	end
         		if ( clk_counter == TICKS_PER_UART_BIT ) begin
         			clk_counter <= 0;
@@ -116,6 +126,7 @@ always @( posedge clk or posedge reset ) begin
 	        DATA_BIT_4: begin
         	    	if ( clk_counter == TICKS_UNTIL_UART_SAMPLE) begin
 		            	data_read[3] <= rx;
+		            	tx <= rx;
        		   	end
         		if ( clk_counter == TICKS_PER_UART_BIT ) begin
         			clk_counter <= 0;
@@ -125,6 +136,7 @@ always @( posedge clk or posedge reset ) begin
 	        DATA_BIT_5: begin
         	    	if ( clk_counter == TICKS_UNTIL_UART_SAMPLE) begin
 		            	data_read[4] <= rx;
+		            	tx <= rx;
        		   	end
         		if ( clk_counter == TICKS_PER_UART_BIT ) begin
         			clk_counter <= 0;
@@ -134,6 +146,7 @@ always @( posedge clk or posedge reset ) begin
 	        DATA_BIT_6: begin
         	    	if ( clk_counter == TICKS_UNTIL_UART_SAMPLE) begin
 		            	data_read[5] <= rx;
+		            	tx <= rx;
        		   	end
         		if ( clk_counter == TICKS_PER_UART_BIT ) begin
         			clk_counter <= 0;
@@ -143,6 +156,7 @@ always @( posedge clk or posedge reset ) begin
 	        DATA_BIT_7: begin
         	    	if ( clk_counter == TICKS_UNTIL_UART_SAMPLE) begin
 		            	data_read[6] <= rx;
+		            	tx <= rx;
        		   	end
         		if ( clk_counter == TICKS_PER_UART_BIT ) begin
         			clk_counter <= 0;
@@ -152,6 +166,7 @@ always @( posedge clk or posedge reset ) begin
 	        DATA_BIT_8: begin
         	    	if ( clk_counter == TICKS_UNTIL_UART_SAMPLE) begin
 		            	data_read[7] <= rx;
+		            	tx <= rx;
        		   	end
         		if ( clk_counter == TICKS_PER_UART_BIT ) begin
         			clk_counter <= 0;
@@ -159,19 +174,26 @@ always @( posedge clk or posedge reset ) begin
         		end 
        		end
 	        STOP_BIT: begin
-       		     	// check for high stop bit
-            		if( rx == 1) begin
-            			rx_state <= WAIT; // start wait for next new byte
-            			valid_byte <= 1;
-        	    		clk_counter <= 0;            			
-	            	end
-        	    	else begin
-        	             	rx_state <= ERROR;
-		      		error <= 1;
-       		     		valid_byte <= 0;
-        	    		clk_counter <= 0;
-        	    		rts <= 1'b1; // Unassert RTS signal   	
-        	    	end
+		        if ( clk_counter == TICKS_UNTIL_UART_SAMPLE) begin
+	       		     	// check for high stop bit
+		    		if( rx == 1) begin
+		    			rx_state <= WAIT; // start wait for next new byte
+		    			valid_byte <= 1;
+			    		clk_counter <= 0;   
+			    		tx <= rx;         			
+			    	end
+			    	else begin
+			             	rx_state <= ERROR;
+			      		error <= 1;
+	       		     		valid_byte <= 0;
+			    		clk_counter <= 0;
+			    		rts <= 1'b1; // Unassert RTS signal   	
+			    	end		            	
+       		   	end
+        		if ( clk_counter == TICKS_PER_UART_BIT ) begin
+        			clk_counter <= 0;
+        			rx_state <= WAIT;
+        		end 
         	    end            
             	ERROR: begin            
               		// count 20 uart cycles and then set rts high ???

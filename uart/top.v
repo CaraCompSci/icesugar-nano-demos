@@ -2,7 +2,23 @@
 `include "ram_block.v"
 
 
-module top(input wire CLK , PMODL2, PMODL4, output wire PMOD1, PMOD2, PMOD3, PMOD4, PMOD5, PMOD6, PMOD7, PMOD8, PMODL1, PMODL3 );
+module top(
+	input wire CLK,
+	input wire PMODL2,
+	input wire PMODL4,
+	
+	
+	output wire PMOD1,
+	output wire PMOD2,
+	output wire PMOD3,
+	output wire PMOD4,
+	output wire PMOD5, 
+	output wire PMOD6, 
+	output wire PMOD7, 
+	output wire PMOD8, 
+	output wire PMODL1, 
+	output wire PMODL3
+);
 
 	reg [31:0] counter;
 	reg [7:0] leds;
@@ -19,9 +35,9 @@ module top(input wire CLK , PMODL2, PMODL4, output wire PMOD1, PMOD2, PMOD3, PMO
 	assign PMOD4 = !leds[1];
 	assign PMOD2 = !leds[0];
 
-	wire valid_byte;
-    	wire [7:0] byte_buffer_in;
-    	wire error; 
+	reg valid_byte;
+    	reg [7:0] byte_buffer_in;
+    	reg error; 
     	reg reset; // Active-high reset
     	assign PMODL1 = rts;
     	assign PMODL3 = tx;
@@ -30,26 +46,25 @@ module top(input wire CLK , PMODL2, PMODL4, output wire PMOD1, PMOD2, PMOD3, PMO
 	// B6 / PMODL4 - RXD
 	// A3 / PMODL1 - RTS#
 	// B3 / PMODL2 - CTS# 
-	uart_rx uart_in ( .clk (CLK), .reset (reset), .rx (PMODL4), .tx ( PMODL3 ), .cts (PMODL2), .rts (PMODL1), .data_read (byte_buffer_in), .valid_byte (valid_byte), .error (error) );
+	
+	uart_rx uart_in ( .clk (CLK), .reset (reset), .rx (PMODL4), .tx ( PMODL3 ), .cts (PMODL2), .rts (PMODL1), .data_read (byte_buffer_in), .valid_byte (valid_byte), .error (error), .debug( leds)  );
 	
  	
 	initial begin
 		counter = 0;
-		leds = 1;
+		leds = 0;
 		direction = 1;
 		leds_next = 1;
 		reset = 0;
 	end
 	
-	
-	always @ (posedge valid_byte ) begin
-		leds <= byte_buffer_in; 
-	end
-	
-	
-	
-	/*always @ (posedge CLK ) begin
-		counter <= counter + 1;
+		
+	always @(posedge CLK ) begin	
+		if (valid_byte == 1 ) begin
+			leds <= byte_buffer_in; 	
+		end
+
+		/*counter <= counter + 1;
 		if (counter[10] && !counter[19]) begin
 			leds <= leds_next;
 		end
@@ -69,12 +84,10 @@ module top(input wire CLK , PMODL2, PMODL4, output wire PMOD1, PMOD2, PMOD3, PMO
 					leds_next <= leds >> 1;		
 				end
 			end
-		end
+		end*/
 		
-	end */
-	
-
-    		
+	end 
+	    		
 endmodule
 
 
