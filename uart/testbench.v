@@ -44,31 +44,33 @@ module uart_tb;
     // Apply test stimuli and display outputs
     initial begin
     	CLK = 0;
-    	reset = 0;
+    	reset = 1;
+    	PMODL4 = 1;
         // Apply input values
-        #20 PMODL4 = 1;
-        #20 PMODL4 = 0;
-        #20 PMODL4 = 1;
-        #20 PMODL4 = 0;
-        #20 PMODL4 = 1;
-        #20 PMODL4 = 0;
-        #20 PMODL4 = 1;
-        #20 PMODL4 = 0;
-        #20 PMODL4 = 1;
-        #20 PMODL4 = 0;
+        #104 PMODL4 = 0; reset = 0; // start bit
+        #104 PMODL4 = 1;
+        #104 PMODL4 = 0;
+        #104 PMODL4 = 1;
+        #104 PMODL4 = 0;
+        #104 PMODL4 = 1;
+        #104 PMODL4 = 0;
+        #104 PMODL4 = 1;
+        #104 PMODL4 = 0;
+        #104 PMODL4 = 1;
+        #104 PMODL4 = 1; // stop bit
         
         // Wait some time and finish the simulation
-        #20 $finish;
+        #104 $finish;
     end
 
     // Monitor and display the inputs and outputs
     initial begin
-        $monitor("At time %t: PMODL4=%b byte_buffer_in=%b", $time, PMODL4, byte_buffer_in);
+        $monitor("At time %t: PMODL4=%b byte_buffer_in=%b valid_byte=%b", $time, PMODL4, byte_buffer_in, valid_byte);
     end
     
-    // Generate the clock signal with a period of 20ns
+    // Generate the clock signal with a period of 84ns (~12Mhz)
     always begin
-        #10 CLK = ~CLK;  // Toggle the clock signal every 10ns (half-period)
+        #1 CLK = ~CLK;  // Toggle the clock signal every 41.6ns (half-period)
     end
     
     
