@@ -1,4 +1,4 @@
-`timescale 1ns/100ps
+`timescale 10ns/1ns
 
 `include "uart_rx.v"
 
