@@ -70,7 +70,7 @@ module uart_tb;
     
     // Generate the clock signal with a period of 84ns (~12Mhz)
     always begin
-        #1 CLK = ~CLK;  // Toggle the clock signal every 41.6ns (half-period)
+        #1 CLK = ~CLK;  // Toggle the clock signal every (half-period)
     end
     
     
